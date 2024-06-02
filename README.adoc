@@ -1,0 +1,48 @@
+= Bruno Action
+
+GitHub Action executing bruno cli runner.
+// TODO add bruno link
+
+== Usage
+
+[source,yaml]
+----
+name: Bruno Test Collection
+
+on:
+  workflow_dispatch:
+
+jobs:
+  bruno-tests:
+    name: Bruno test collection
+    runs-on: ubuntu-latest
+    steps:
+      # Change @main to a specific commit SHA or version tag, e.g.:
+      # krummbar/bruno-actione76147da8e5c81eaf017dede5645551d4b94427b
+      # krummbar/bruno-actionv1.2.3
+      - name: Bruno CLI runner
+        id: bru-cli
+        uses: krummbar/bruno-action@main
+        with:
+          filename: path/to/your/collection
+          env: integration
+          # envVars need to be separated with line breaks
+          envVars: |-
+            foo=bar
+            say=hello
+          output: output.json
+          outputFormat: json
+----
+
+=== Inputs
+
+// TODO describe inputs
+
+=== Outputs
+
+// TODO describe outputs# echo bru run
+
+
+== Development
+
+* xref::.github/workflows/ci-resources/README.adoc[CICD]

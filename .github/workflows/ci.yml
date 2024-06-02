@@ -24,7 +24,7 @@ jobs:
           - 5001:5000
 
     env:
-      TEST_TAG: localhost:5001/actions/hello-world-docer-action:latest
+      TEST_TAG: localhost:5001/actions/bruno-action:latest
 
     steps:
       - name: Checkout
@@ -49,10 +49,10 @@ jobs:
       - name: Run the Container
         id: run
         env:
-          INPUT_WHO_TO_GREET: Mona Lisa Octocat
-        run: |
+          INPUTS_FILENAME: ping.bru
+        run:
           docker run \
-            --env INPUT_WHO_TO_GREET="${{ env.INPUT_WHO_TO_GREET }}" \
+            --env INPUTS_FILENAME="${{ env.INPUTS_FILENAME }}" \
             --rm ${{ env.TEST_TAG }}
 
   test-action:
@@ -68,8 +68,18 @@ jobs:
         id: test-action
         uses: ./
         with:
-          who-to-greet: Mona Lisa Octocat
+          path: .github/workflows/ci-resources/bruno-action-tests
+          recursive: true
+          env: cicd
+          envVars: |-
+            apiKey=cicd-supersecret-key
+            xAdminKey=admin-key
+          output: custom-output.json
+          outputFormat: json
+          insecure: true
+          testsOnly: true
+          bail: true
 
       - name: Print Output
         id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
+        run: echo "${{ steps.test-action.outputs.success }}"
